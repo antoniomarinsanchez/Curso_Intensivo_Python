@@ -25,16 +25,32 @@ class AlienInvasion:
     def run_game(self):
         """Initialize the game main loop."""
         while True:
-            # Search key and mouse events.
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    sys.exit()
+            self._check_events()
+            self.ship.update()
+            self._update_screen()
 
-            # Paint the screen in each step
-            self.screen.fill(self.bg_color)
-            self.ship.blitme()
-            # Make visible the last painting screen
-            pygame.display.flip()
+    def _check_events(self):
+        # Search key and mouse events.
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RIGHT:
+                    self.ship.moving_right = True
+                elif event.key == pygame.K_LEFT:
+                    self.ship.moving_left = True
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_RIGHT:
+                    self.ship.moving_right = False
+                if event.key == pygame.K_LEFT:
+                    self.ship.moving_left = False
+
+    def _update_screen(self):
+        # Paint the screen in each step
+        self.screen.fill(self.bg_color)
+        self.ship.blitme()
+        # Make visible the last painting screen
+        pygame.display.flip()
 
 
 if __name__ == '__main__':
