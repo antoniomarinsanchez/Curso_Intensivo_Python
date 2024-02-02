@@ -11,7 +11,7 @@ class Alien(Sprite):
         self.screen = ai_game.screen
 
         # Load the image of the alien
-        self.image = pygame.image.load('images/Alien_alienInvasion.png')
+        self.image = pygame.image.load('images/Alien_alienInvasion.bmp')
         self.rect = self.image.get_rect()
 
         # Starts an alien close to up-left position on screen

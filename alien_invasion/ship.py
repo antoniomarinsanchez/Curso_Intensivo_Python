@@ -9,7 +9,7 @@ class Ship:
         self.screen_rect = ai_game.screen.get_rect()
 
         # Load the image of the ship and get its rect
-        self.image = pygame.image.load('images/NaveEspacial_alienInvasion.png')
+        self.image = pygame.image.load('images/NaveEspacial_alienInvasion.bmp')
         self.rect = self.image.get_rect()
 
         # Put the ship in the center at the begining
