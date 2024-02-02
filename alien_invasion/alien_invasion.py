@@ -34,14 +34,7 @@ class AlienInvasion:
         while True:
             self._check_events()
             self.ship.update()
-            self.bullets.update()
-
-            # Remove bullets outside the screen
-            for bullet in self.bullets.copy():
-                if bullet.rect.bottom <= 0:
-                    self.bullets.remove(bullet)
-            # print(len(self.bullets))
-
+            self._update_bullets()
             self._update_screen()
 
     def _check_events(self):
@@ -76,7 +69,17 @@ class AlienInvasion:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
 
+    def _update_bullets(self):
+        """Update bullets positions and remove bullets"""
+        self.bullets.update()
+        # Remove bullets outside the screen
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
+        # print(len(self.bullets))
+
     def _update_screen(self):
+        """Update sprites on screen"""
         # Paint the screen in each step
         self.screen.fill(self.bg_color)
         self.ship.blitme()
