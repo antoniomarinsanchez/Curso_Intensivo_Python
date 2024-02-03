@@ -1,6 +1,7 @@
 
 import sys
 import pygame
+import time
 
 from settings import Settings
 from ship import Ship
@@ -38,6 +39,7 @@ class AlienInvasion:
             self._check_events()
             self.ship.update()
             self._update_bullets()
+            self._update_aliens()
             self._update_screen()
 
     def _check_events(self):
@@ -81,6 +83,13 @@ class AlienInvasion:
                 self.bullets.remove(bullet)
         # print(len(self.bullets))
 
+    def _update_aliens(self):
+        """Check if the fleet is touching the edge and update the position"""
+        self._check_fleet_edges()
+        self.aliens.update()
+        # Sleep to delay the game update
+        time.sleep(0.01)
+
     def _create_fleet(self):
         """Create a fleet of aliens"""
         # Create an alien and figure out the number of aliens avaialables on screen
@@ -108,6 +117,19 @@ class AlienInvasion:
         alien.rect.x = alien.x
         alien.rect.y = alien_height + 2 * alien_height * row_number
         self.aliens.add(alien)
+
+    def _check_fleet_edges(self):
+        """Change fleet direction if any alien is touching any edge"""
+        for alien in self.aliens:
+            if alien.check_edges():
+                self._change_fleet_direction()
+                break
+
+    def _change_fleet_direction(self):
+        """Change the fleet direction and move the fleet down"""
+        for alien in self.aliens:
+            alien.rect.y += self.settings.fleet_drop_speed
+        self.settings.fleet_direction *= -1
 
     def _update_screen(self):
         """Update sprites on screen"""
