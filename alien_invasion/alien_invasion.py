@@ -1,12 +1,14 @@
 
 import sys
 import pygame
-import time
+from time import sleep
 
 from settings import Settings
+from game_stats import GameStats
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
+
 
 class AlienInvasion:
     """General class for managing the game resources and behaviour."""
@@ -14,15 +16,15 @@ class AlienInvasion:
         """Initialize the game and create de resources."""
         pygame.init()
         self.settings = Settings()
-
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
-
         # Fullscreen
         # self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         # self.settings.screen_width = self.screen.get_rect().width
         # self.settings.screen_width = self.screen.get_rect().height
-
         pygame.display.set_caption("Alien Invasion")
+
+        # Create an instance to save the game stats
+        self.stats = GameStats(self)
 
         # Configure the background color
         self.bg_color = self.settings.bg_color
@@ -99,10 +101,10 @@ class AlienInvasion:
         self._check_fleet_edges()
         self.aliens.update()
         # Sleep to delay the game update
-        time.sleep(self.settings.game_delay)
+        sleep(self.settings.game_delay)
         # Check if there is any collision between alien and ship
         if pygame.sprite.spritecollideany(self.ship, self.aliens):
-            print("Ship Hit!")
+            self._ship_hit()
 
     def _create_fleet(self):
         """Create a fleet of aliens"""
@@ -131,6 +133,19 @@ class AlienInvasion:
         alien.rect.x = alien.x
         alien.rect.y = alien_height + 2 * alien_height * row_number
         self.aliens.add(alien)
+
+    def _ship_hit(self):
+        """Respond to the collisión between an alien and the ship"""
+        # Decrement ships_left in one
+        self.stats.ships_left -= 1
+        # Clean the aliens and the bullets
+        self.aliens.empty()
+        self.bullets.empty()
+        # Create a new fleet and center the ship
+        self._create_fleet()
+        self.ship.center_ship()
+        # Pause the game
+        sleep(0.5)
 
     def _check_fleet_edges(self):
         """Change fleet direction if any alien is touching any edge"""
