@@ -25,6 +25,9 @@ class Settings:
         # Change of the game speed between levels
         self.speedup_scale = 1.1
 
+        # Change the score of the aliens between levels
+        self.score_scale = 1.5
+
         # Initialize dynamic settings in each game
         self.initialize_dynamic_settings()
 
@@ -34,13 +37,18 @@ class Settings:
         self.bullet_speed = 3
         self.alien_speed = 1.0
 
+        # Score
+        self.alien_points = 50
+
         # fleet direction 1 to right, -1 to left
         self.fleet_direction = 1
 
     def increase_speed(self):
-        """Increase the speed settings"""
+        """Increase the speed and score settings"""
         self.ship_speed *= self.speedup_scale
         self.alien_speed *= self.speedup_scale
         self.bullet_speed *= self.speedup_scale
+
+        self.alien_points = int(self.alien_points * self.score_scale)
 
 
